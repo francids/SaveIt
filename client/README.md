@@ -1,0 +1,5 @@
+# SaveIt - Client
+
+```
+bun dev
+```
