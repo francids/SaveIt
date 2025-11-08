@@ -1,15 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "./AuthProvider";
 
 export default function AuthPage() {
-  const { login, register } = useAuth();
+  const { login, register, isAuthenticated } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const isAuth = await isAuthenticated();
+      if (isAuth) {
+        navigate("/app");
+      }
+    };
+    checkAuth();
+  }, [isAuthenticated, navigate]);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
