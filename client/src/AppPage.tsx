@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "./AuthProvider";
+import Logo from "./Logo";
 
 type ItemType = "note" | "link";
 
@@ -40,7 +41,7 @@ export default function AppPage() {
       {/* Navbar */}
       <div className="navbar bg-base-100 shadow-sm">
         <div className="flex-1">
-          <a className="btn btn-ghost text-xl">Stash</a>
+          <Logo className="fill-primary h-5" />
         </div>
         <div className="flex-none">
           <button

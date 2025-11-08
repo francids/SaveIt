@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import Logo from "./Logo";
 
 export default function IndexPage() {
   const navigate = useNavigate();
@@ -7,7 +8,7 @@ export default function IndexPage() {
     <div className="hero bg-base-200 min-h-screen">
       <div className="hero-content text-center">
         <div className="max-w-md">
-          <h1 className="text-5xl font-bold pb-6">Welcome to Stash</h1>
+          <Logo className="mb-6 fill-primary" />
           <button className="btn btn-primary" onClick={() => navigate("/auth")}>
             Get started
           </button>
