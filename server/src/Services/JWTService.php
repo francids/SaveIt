@@ -19,7 +19,7 @@ class JWTService
     public function generateToken($userId)
     {
         $payload = [
-            "iss" => "SaveItBackend",
+            "iss" => "StashBackend",
             "iat" => time(),
             "exp" => time() + $this->expirationTime,
             "user_id" => $userId,

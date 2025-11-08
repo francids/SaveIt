@@ -9,7 +9,7 @@ class Connection
     {
         $host = $_ENV["DB_HOST"] ?? "127.0.0.1";
         $port = $_ENV["DB_PORT"] ?? "3306";
-        $dbname = $_ENV["DB_NAME"] ?? "SaveItDatabase";
+        $dbname = $_ENV["DB_NAME"] ?? "StashDatabase";
         $user = $_ENV["DB_USER"] ?? "root";
         $pass = $_ENV["DB_PASS"] ?? "1234";
 

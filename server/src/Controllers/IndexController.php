@@ -5,7 +5,7 @@ class IndexController
 {
     public function index(): array
     {
-        return ["message" => "Hello from SaveIt backend"];
+        return ["message" => "Hello from Stash backend"];
     }
 
     public function hello(): array

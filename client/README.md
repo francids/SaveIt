@@ -1,4 +1,4 @@
-# SaveIt - Client
+# Stash - Client
 
 ```
 bun dev
