@@ -22,10 +22,9 @@ $indexController = new IndexController();
 $authController = new AuthController(new UserService(new Connection()), new JWTService());
 $itemsController = new ItemsController(new ItemsService(new Connection()));
 
-if ($path == "/") {
-    echo json_encode($indexController->index());
-    exit;
-}
+if ($path === "/")
+    $indexController->index();
+
 
 if ($path === "/login" && $method === "POST") {
     echo json_encode($authController->login());
@@ -49,11 +48,6 @@ if ($path === "/items") {
         case "DELETE":
             $itemsController->remove($userId);
     }
-}
-
-if ($path == "/hello") {
-    echo json_encode($indexController->hello());
-    exit;
 }
 
 http_response_code(404);
