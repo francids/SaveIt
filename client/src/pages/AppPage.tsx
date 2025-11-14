@@ -1,40 +1,68 @@
 import { useState } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import Logo from "../Logo";
-
-type ItemType = "note" | "link";
-
-interface SavedItem {
-  id: string;
-  type: ItemType;
-  content: string;
-  createdAt: Date;
-}
+import useFetch from "../hooks/useFetch";
+import type Item from "../interfaces/Item";
+import type { ItemType } from "../interfaces/Item";
 
 export default function AppPage() {
   const { logout } = useAuth();
-  const [items, setItems] = useState<SavedItem[]>([]);
   const [newContent, setNewContent] = useState("");
   const [selectedType, setSelectedType] = useState<ItemType>("note");
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  const handleAdd = (event: React.FormEvent) => {
+  const { data: items, error } = useFetch<Item[]>(`/items?v=${refreshKey}`);
+  const { execute: addItem } = useFetch("/items", {
+    method: "POST",
+    lazy: true,
+  });
+  const { execute: deleteItem } = useFetch("/items", {
+    method: "DELETE",
+    lazy: true,
+  });
+
+  const handleAdd = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!newContent.trim()) return;
 
-    const newItem: SavedItem = {
-      id: Date.now().toString(),
-      type: selectedType,
-      content: newContent,
-      createdAt: new Date(),
-    };
-
-    setItems([newItem, ...items]);
-    setNewContent("");
+    try {
+      await addItem({
+        content: newContent,
+        type: selectedType,
+      });
+      setNewContent("");
+      setRefreshKey((prev) => prev + 1);
+    } catch (err) {
+      console.error("Failed to add item:", err);
+    }
   };
 
-  const handleDelete = (id: string) => {
-    setItems(items.filter((item) => item.id !== id));
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteItem({ id });
+      setRefreshKey((prev) => prev + 1);
+    } catch (err) {
+      console.error("Failed to delete item:", err);
+    }
   };
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-base-200">
+        <div className="alert alert-error">
+          <span>Error: {error}</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!items) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-base-200">
+        <span className="loading loading-spinner text-primary"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-base-200">
@@ -133,7 +161,7 @@ export default function AppPage() {
                           {item.type === "note" ? "Note" : "Link"}
                         </div>
                         <span className="text-xs text-base-content/60">
-                          {item.createdAt.toLocaleString()}
+                          {item.created_at.toLocaleString()}
                         </span>
                       </div>
                       {item.type === "link" ? (
